@@ -5,10 +5,11 @@ from typing import List
 
 ###################################################################################
 
+VERBOSE = True
 DEFAULT_DOWNLOAD_FOLDER = "data/geonames"
 BASE_URL = "https://download.geonames.org/export/dump/"
 FILES = [
-    "allCountries.zip",
+    # "allCountries.zip",
     "cities500.zip",
     "cities1000.zip",
     "cities5000.zip",
@@ -17,7 +18,7 @@ FILES = [
     "admin1CodesASCII.txt",
     "admin2Codes.txt",
     "iso-languagecodes.txt",
-    "featureCodes.txt",
+    "featureCodes_en.txt",
     "timeZones.txt",
     "countryInfo.txt",
     "hierarchy.zip",
@@ -60,14 +61,22 @@ def download_file(url: str, dest_folder: str) -> None:
 
 
 def download_files(file_list: List[str], dest_folder: str = DEFAULT_DOWNLOAD_FOLDER) -> None:
+    if VERBOSE:
+        print("[DOWNLOAD FILES]")
     for file_name in file_list:
+        if VERBOSE:
+            print("download: " + file_name)
         file_url = BASE_URL + file_name
         download_file(file_url, dest_folder)
 
 
 def unzip_files(dest_folder: str = DEFAULT_DOWNLOAD_FOLDER) -> None:
+    if VERBOSE:
+        print("[UNZIP FILES]")
     for file_name in os.listdir(dest_folder):
         if file_name.endswith(".zip"):
+            if VERBOSE:
+                print("process: " + file_name)
             file_path = os.path.join(dest_folder, file_name)
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 zip_ref.extractall(dest_folder)
@@ -75,10 +84,14 @@ def unzip_files(dest_folder: str = DEFAULT_DOWNLOAD_FOLDER) -> None:
 
 ###################################################################################
 
+
 def main() -> None:
-    ALL_FILES : List[str] = FILES + [f"{file}.zip" for file in FEATURES_FILES]
+    ALL_FILES: List[str] = FILES + [f"{file}.zip" for file in FEATURES_FILES]
     download_files(FILES)
     unzip_files()
+    if VERBOSE:
+        print("done")
+
 
 if __name__ == "__main__":
     main()
