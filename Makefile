@@ -1,5 +1,6 @@
 download:
-	python3 download.py
+	python3 download_kaggle.py
+	python3 download_geonames.py
 
 transform:
 	python3 transform.py
