@@ -1,5 +1,5 @@
 download:
-	python3 kaggle.py
+	python3 download.py
 
 transform:
 	python3 transform.py
