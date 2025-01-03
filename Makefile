@@ -1,6 +1,9 @@
 download:
 	python3 kaggle.py
 
+transform:
+	python3 transform.py
+
 resume:
 	@echo "Creating resume directory if it does not exist..."
 	mkdir -p resume
