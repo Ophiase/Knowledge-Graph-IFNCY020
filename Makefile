@@ -4,6 +4,9 @@ download:
 transform:
 	python3 transform.py
 
+basic_queries:
+	python3 basic_queries.py
+
 resume:
 	@echo "Creating resume directory if it does not exist..."
 	mkdir -p resume
