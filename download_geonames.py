@@ -6,7 +6,10 @@ from typing import List
 ###################################################################################
 
 VERBOSE = True
-DEFAULT_DOWNLOAD_FOLDER = "data/geonames"
+DOWNLOAD_ENABLED = True
+UNZIP_ENABLED = True
+
+DEFAULT_DOWNLOAD_FOLDER = os.path.join("data", "geonames")
 BASE_URL = "https://download.geonames.org/export/dump/"
 FILES = [
     # "allCountries.zip",
@@ -24,6 +27,7 @@ FILES = [
     "hierarchy.zip",
     "adminCode5.zip"
 ]
+FEATURES_FILES_FOLDER = os.path.join(DEFAULT_DOWNLOAD_FOLDER, "features")
 FEATURES_FILES = [
     "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AQ", "AR", "AS", "AT", "AU", "AW",
     "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO",
@@ -86,9 +90,13 @@ def unzip_files(dest_folder: str = DEFAULT_DOWNLOAD_FOLDER) -> None:
 
 
 def main() -> None:
-    ALL_FILES: List[str] = FILES + [f"{file}.zip" for file in FEATURES_FILES]
-    download_files(FILES)
-    unzip_files()
+    if DOWNLOAD_ENABLED:
+        download_files(FILES)
+        download_files(
+            [f"{file}.zip" for file in FEATURES_FILES],
+            dest_folder=FEATURES_FILES_FOLDER)
+    if UNZIP_ENABLED:
+        unzip_files()
     if VERBOSE:
         print("done")
 
