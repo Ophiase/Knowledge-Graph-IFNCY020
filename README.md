@@ -4,13 +4,15 @@
 
 ## Installation
 
-Requires : Apache Jena, Riot, Fuseki
-
 ```python
 # extract transform
 make download 
 make transform
 ```
+
+### Setup a server
+
+Requires : Apache Jena, Riot, Fuseki
 
 ```bash
 # do not forget to add JENA to java class path in .zshrc or .bashrc
