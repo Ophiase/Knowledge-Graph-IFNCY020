@@ -9,7 +9,8 @@ transform:
 	python3 transform_geonames.py
 
 basic_queries:
-	python3 basic_queries.py
+	python3 basic_queries_open_drug.py
+	python3 basic_queries_geonames.py
 
 #########################################
 
