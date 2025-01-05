@@ -22,6 +22,9 @@ basic_queries:
 reasoning:
 	python3 reasoning.py
 
+setup_server:
+	@echo todo..
+
 #########################################
 
 resume: resume_open_drug resume_geonames
