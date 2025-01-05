@@ -188,6 +188,10 @@ replay_pid*
 
 rdf_data
 rdf_database
+
 data/
 old/
 resume/
+
+apache-jena-*/
+run/

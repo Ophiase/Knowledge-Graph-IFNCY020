@@ -35,24 +35,35 @@ make download
 make transform
 make merge
 ```
-
 ### Setup a server
+
+It's not necessary to set up a server; the Python scripts can directly operate on the .rdf files.
 
 Requires: Apache Jena, Riot, Fuseki
 
 ```bash
-# for script requiring org.apache.jena,
-# do not forget to add JENA to java class path in .zshrc or .bashrc
+# For scripts requiring org.apache.jena,
+# do not forget to add JENA to the Java class path in .zshrc or .bashrc
 export CLASSPATH=$CLASSPATH:$JENAROOT/lib/*
 ```
 
 ```bash
-# todo, setup the server
+# Set up the server
+make setup_server
+make start_server
+make load_rdf # requires make transform
+# Stop the server
+make stop_server
 ```
 
 ## Usage
 
 ### Run Basic Queries
+
+By default, the scripts will be launched directly on the .rdf files. \
+If you want to use them on the JENA server, \
+set `USE_JENA_SERVER = True` in `basic_queries_geonames.py`.
+```
 
 ```bash
 make basic_queries
