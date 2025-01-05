@@ -9,6 +9,7 @@
 ex:location a rdfs:Class .
 ex:city a rdfs:Class ; rdfs:subClassOf ex:location .
 ex:country a rdfs:Class ; rdfs:subClassOf ex:location .
+ex:feature a rdfs:Class ; rdfs:subClassOf ex:location .
 ex:drug a rdfs:Class .
 ex:condition a rdfs:Class .
 ex:interaction a rdfs:Class .

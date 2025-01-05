@@ -6,9 +6,11 @@ from typing import Dict, Tuple
 ###################################################################################
 
 DATA_FOLDER = os.path.join("data", "geonames")
+FEATURES_FOLDER = os.path.join(DATA_FOLDER, "features")
 OUTPUT_FILE = os.path.join("data", "geonames.rdf")
 VERBOSE = True
 LINE_LIMIT = 1000
+LINE_LIMIT_FEATURE = 100
 
 ###################################################################################
 
@@ -146,6 +148,36 @@ def process_time_zones(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
         EX.raw_offset: "raw_offset_independant_of_dst"
     }, "country_code")
 
+
+def process_features(g: Graph, EX: Namespace, file_path: str) -> None:
+    df = pd.read_csv(file_path, delimiter='\t', header=None, names=[
+        "geoname_id", "name", "ascii_name", "alternate_names", "latitude", "longitude",
+        "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code",
+        "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"
+    ], nrows=LINE_LIMIT_FEATURE, comment='#', on_bad_lines='skip')
+    
+    add_triples(g, df, EX.feature, EX.feature, {
+        EX.geoname_id: "geoname_id",
+        EX.name: "name",
+        EX.ascii_name: "ascii_name",
+        EX.alternate_names: "alternate_names",
+        EX.latitude: "latitude",
+        EX.longitude: "longitude",
+        EX.feature_class: "feature_class",
+        EX.feature_code: "feature_code",
+        EX.country_code: "country_code",
+        EX.cc2: "cc2",
+        EX.admin1_code: "admin1_code",
+        EX.admin2_code: "admin2_code",
+        EX.admin3_code: "admin3_code",
+        EX.admin4_code: "admin4_code",
+        EX.population: "population",
+        EX.elevation: "elevation",
+        EX.dem: "dem",
+        EX.timezone: "timezone",
+        EX.modification_date: "modification_date"
+    }, "geoname_id")
+
 ###################################################################################
 
 
@@ -198,6 +230,17 @@ def process_file(g: Graph, EX: Namespace, file_name: str, file_path: str) -> Non
         if VERBOSE:
             print(f"File {file_name} not recognized, skipping.")
 
+
+def process_feature_files(g: Graph, EX: Namespace) -> None:
+    if VERBOSE:
+        print("Processing feature folder")
+    for file_name in sorted(os.listdir(FEATURES_FOLDER)):
+        if VERBOSE:
+            print(f"{file_name}, ", end="", flush=True)
+        file_path = os.path.join(FEATURES_FOLDER, file_name)
+        if file_name.endswith(".txt"):
+            process_features(g, EX, file_path)
+
 ###################################################################################
 
 
@@ -206,6 +249,7 @@ def main():
     for file_name in os.listdir(DATA_FOLDER):
         file_path = os.path.join(DATA_FOLDER, file_name)
         process_file(g, EX, file_name, file_path)
+    process_feature_files(g, EX)
     print("serialize...")
     g.serialize(destination=OUTPUT_FILE, format='xml')
     print("done")
