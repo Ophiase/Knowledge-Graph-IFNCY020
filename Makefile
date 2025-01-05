@@ -3,6 +3,7 @@
 download:
 	python3 download_kaggle.py
 	python3 download_geonames.py
+	python3 download_sparql.py
 
 transform:
 	python3 transform_open_drug.py

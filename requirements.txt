@@ -1,2 +1,4 @@
 kaggle
 rdflib
+requests
+SPARQLWrapper
