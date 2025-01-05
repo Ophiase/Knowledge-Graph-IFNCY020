@@ -2,7 +2,7 @@ from rdflib import Graph
 
 ###################################################################################
 
-RDF_FILE = "data/geonames_knowledge_graph.rdf"
+RDF_FILE = "data/geonames.rdf"
 MINIMAL_QUERIES_ENABLED = False
 OTHER_QUERIES_ENABLED = True
 

@@ -6,7 +6,7 @@ from typing import Dict, Tuple
 ###################################################################################
 
 DATA_FOLDER = os.path.join("data", "geonames")
-OUTPUT_FILE = os.path.join("data", "geonames_knowledge_graph.rdf")
+OUTPUT_FILE = os.path.join("data", "geonames.rdf")
 VERBOSE = True
 LINE_LIMIT = 10000
 

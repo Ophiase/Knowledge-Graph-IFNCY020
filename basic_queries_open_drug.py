@@ -1,6 +1,6 @@
 from rdflib import Graph
 
-RDF_FILE = "data/knowledge_graph.rdf"
+RDF_FILE = "data/open_drug.rdf"
 
 def query_graph(query: str):
     g = Graph()

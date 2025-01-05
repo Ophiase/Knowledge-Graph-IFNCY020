@@ -4,7 +4,7 @@ from rdflib.plugins.sparql import prepareQuery
 
 ###################################################################################
 
-RDF_FILE = os.path.join("data", "geonames_knowledge_graph.rdf")
+RDF_FILE = os.path.join("data", "geonames.rdf")
 ONTOLOGY_FILE = os.path.join("ontology.ttl")
 VERBOSE = True
 

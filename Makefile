@@ -9,6 +9,9 @@ transform:
 	python3 transform_open_drug.py
 	python3 transform_geonames.py
 
+merge:
+	python3 merge_rdf.py
+
 basic_queries:
 	python3 basic_queries_open_drug.py
 	python3 basic_queries_geonames.py
