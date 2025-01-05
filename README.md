@@ -1,6 +1,4 @@
-# [Knowledge Graph IFNCY020](https://github.com/Ophiase/Knowledge-Graph-IFNCY020)
-
-🏗️ Work In Progress | Deadline: 5 Jan. 2025
+# 🧠 [Knowledge Graph IFNCY020](https://github.com/Ophiase/Knowledge-Graph-IFNCY020)
 
 This project involves creating a basic knowledge graph for a university assignment. The knowledge graph integrates data from various sources, including Geonames, Wikidata, DBpedia, Open-Drug, and PubMed. The data is downloaded, transformed into RDF format, and merged into a single RDF file. The ontology defines the structure of the knowledge graph, ensuring consistency and enabling reasoning over the data. The project includes scripts for data downloading, transformation, and merging, as well as examples of basic queries and reasoning.
 
