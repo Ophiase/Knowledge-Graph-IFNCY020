@@ -19,8 +19,9 @@ This project involves creating a basic knowledge graph for a university assignme
     - [Open-Drug](#open-drug)
     - [PubMed](#pubmed)
   - [Data Loading and Transformation](#data-loading-and-transformation)
-  - [Ontology](#ontology)
   - [Challenges](#challenges)
+  - [Conclusion](#conclusion)
+  - [Resources](#resources)
   - [TODO](#todo)
 
 ## Installation
@@ -82,14 +83,14 @@ DBpedia extracts structured information from Wikipedia. We fetch data about citi
 - **cities**: `<city> <name> <country> <population> <area> <latitude> <longitude>`
 - **countries**: `<country> <name> <population> <area> <capital>`
 
-#### 🟢 Open-Drug *(Kaggle)*
+#### 🟢 [Open-Drug](https://www.kaggle.com/datasets/mannbrinson/open-drug-knowledge-graph) *(Kaggle)*
 Open-Drug provides data about drugs, conditions, interactions, and manufacturers. The data is downloaded from Kaggle with [download_kaggle.py](./download_kaggle.py), transformed into RDF format using [transform_open_drug.py](./transform_open_drug.py), and integrated into the knowledge graph. The transformation includes mapping columns to RDF properties and creating triples for each entity. For example:
 - **drugs**: `<drug> <name> <wiki_url> <drugbank_url>`
 - **conditions**: `<condition> <name> <source_id> <url>`
 - **interactions**: `<interaction> <source_drug_id> <target_drug_id>`
 - **manufacturers**: `<manufacturer> <name>`
 
-#### 🟢 PubMed *(Kaggle)*
+#### 🟢 [PubMed](https://www.kaggle.com/datasets/krishnakumarkk/pubmed-knowledge-graph-dataset) *(Kaggle)*
 PubMed provides a large dataset of biomedical literature. Due to its size (50GB), it is not included in this project.
 
 ### Data Loading and Transformation
@@ -98,6 +99,11 @@ PubMed provides a large dataset of biomedical literature. Due to its size (50GB)
 2. **Transform**: Data is transformed into RDF format using [transform_open_drug.py](./transform_open_drug.py) and [transform_geonames.py](./transform_geonames.py). 
     - The transformation scripts map columns to RDF properties and create triples for each entity.
 3. **Merge**: All RDF files are merged into a single RDF file using [merge_rdf.py](./merge_rdf.py).
+
+### Ontology
+
+The ontology defines the structure of the knowledge graph, including classes, properties, and relationships. It ensures consistency and enables reasoning over the data. The ontology is defined in [ontology.ttl](./ontology.ttl) and includes classes such as city, country, and Drug, and properties such as located_in, population, and name.
+
 ### Challenges
 
 #### Federated Query Challenges
@@ -115,7 +121,7 @@ To enhance the knowledge graph, we applied RDFS reasoning to infer new knowledge
 The ontology is defined in [ontology.ttl](./ontology.ttl) and includes the following elements:
 
 - **Classes**: `location`, `city`, `country`, `drug`, `condition`, `interaction`, `manufacturer`
-- **Properties**: `capital_of`, `located_in`, `population`, `source_drug_id`, `target_drug_id`, `manufacturer`
+- **Properties**: `capital_of`, `located_in`, `country_code`, `population`, `source_drug_id`, `target_drug_id`, `manufacturer`
 - **Unification of Properties**: `dbp:region` and `geo:in_country` are unified under `ex:located_in`
 
 #### Reasoning Process
@@ -125,6 +131,30 @@ The ontology is defined in [ontology.ttl](./ontology.ttl) and includes the follo
 3. **Query Graph**: Execute SPARQL queries on the graph before and after reasoning to compare the results.
 
 The reasoning process is implemented in [reasoning.py](./reasoning.py). The script applies RDFS reasoning and compares the results before and after reasoning.
+
+### Conclusion
+The integration of SPARQL queries with RDFS reasoning has proven to be an effective method for exploiting the integrated datasets in our knowledge graph. By defining a clear and consistent ontology, we were able to infer new relationships and properties, enriching the data and providing more comprehensive query results. The use of RDFS reasoning allowed us to automatically classify entities into higher-level categories and extend relationships, making the data more interconnected and valuable.
+
+However, there are some limitations. Loading the graph in Python is quite slow, which can be a bottleneck when dealing with large datasets. Additionally, the requests on Geonames that need to call DBpedia are extremely slow, impacting the overall performance of the system.
+
+Future improvements to this project could include optimizing the data loading process and improving the efficiency of federated queries. Integrating additional datasets could further enrich the knowledge graph and provide more comprehensive insights.
+
+### Resources
+
+- [Datasets](#data)
+  - Geonames
+    - [Geonames Readme.txt](https://download.geonames.org/export/dump/readme.txt)
+  - Wikidata
+    - [Wikidata Ontology, City](https://www.wikidata.org/wiki/Q515)
+  - BDpedia
+    - [BDPedia Ontology](https://dbpedia.org/ontology/)
+    - [BDPedia Ontology, City](https://dbpedia.org/page/City)
+    - [BDPedia Ontology, Country](https://dbpedia.org/page/Country)
+  - Open Drug
+    - [Open Drug Kaggle](https://www.kaggle.com/datasets/krishnakumarkk/pubmed-knowledge-graph-dataset)
+    - [Open Drug Paper](https://ceur-ws.org/Vol-2873/paper10.pdf)
+  - PubMed
+    - I finally didn't use it.
 
 ### TODO
 
