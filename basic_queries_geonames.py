@@ -50,7 +50,7 @@ MINIMAL_QUERIES = {
     "federated_query": f"""
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX geo: <{GEONAMES_PREFIX}>
-    SELECT ?city ?name ?name2 ?population ?abstract
+    SELECT ?city ?name ?population ?abstract
     WHERE {{
         SERVICE <https://dbpedia.org/sparql> {{
             ?dbo_city a dbo:City ;
@@ -62,6 +62,7 @@ MINIMAL_QUERIES = {
         ?city a geo:city ;
               geo:name ?name2 ;
               geo:population ?population .
+              FILTER (STR(?name) = STR(?name2))
     }}
     LIMIT 1
     """,
