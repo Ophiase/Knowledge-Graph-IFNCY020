@@ -23,7 +23,15 @@ reasoning:
 	python3 reasoning.py
 
 setup_server:
-	@echo todo..
+	./setup_jena_server.sh
+
+start_server:
+	./start_jena_server.sh
+
+stop_server:
+	@echo "Stopping Fuseki server..."
+	pkill -f fuseki-server
+	@echo "Fuseki server stopped."
 
 #########################################
 

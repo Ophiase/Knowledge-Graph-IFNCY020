@@ -11,6 +11,8 @@ This project involves creating a basic knowledge graph for a university assignme
 - [Usage](#usage)
   - [Run Basic Queries](#run-basic-queries)
   - [Ontology](#ontology)
+  - [Start Jena Server](#start-jena-server)
+  - [Stop Jena Server](#stop-jena-server)
 - [Documentation](#documentation)
   - [Data](#data)
     - [Geonames](#geonames)
@@ -47,7 +49,8 @@ export CLASSPATH=$CLASSPATH:$JENAROOT/lib/*
 ```
 
 ```bash
-# todo, setup the server
+# setup the server
+make setup_server
 ```
 
 ## Usage
@@ -62,6 +65,13 @@ make basic_queries
 
 ```bash
 make reasoning
+```
+
+### Start/Stop Jena Server
+
+```bash
+make start_server
+make stop_server
 ```
 
 ## Documentation
