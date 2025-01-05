@@ -1,4 +1,4 @@
-@prefix ex: <http://example.org/geonames/> .
+@prefix ex: <http://example.org/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -6,15 +6,22 @@
 @prefix geo: <http://www.geonames.org/ontology#> .
 
 # Define Classes
-ex:Location a rdfs:Class .
-ex:City a rdfs:Class ; rdfs:subClassOf ex:Location .
-ex:Country a rdfs:Class ; rdfs:subClassOf ex:Location .
+ex:location a rdfs:Class .
+ex:city a rdfs:Class ; rdfs:subClassOf ex:location .
+ex:country a rdfs:Class ; rdfs:subClassOf ex:location .
+ex:drug a rdfs:Class .
+ex:condition a rdfs:Class .
+ex:interaction a rdfs:Class .
+ex:manufacturer a rdfs:Class .
 
 # Define Properties
-ex:capitalOf a rdf:Property ; rdfs:domain ex:City ; rdfs:range ex:Country .
-ex:locatedIn a rdf:Property ; rdfs:domain ex:Location ; rdfs:range ex:Country .
-ex:population a rdf:Property ; rdfs:domain ex:City ; rdfs:range xsd:integer .
+ex:capital_of a rdf:Property ; rdfs:domain ex:city ; rdfs:range ex:country .
+ex:located_in a rdf:Property ; rdfs:domain ex:location ; rdfs:range ex:country .
+ex:population a rdf:Property ; rdfs:domain ex:city ; rdfs:range xsd:integer .
+ex:source_drug_id a rdf:Property ; rdfs:domain ex:interaction ; rdfs:range ex:drug .
+ex:target_drug_id a rdf:Property ; rdfs:domain ex:interaction ; rdfs:range ex:drug .
+ex:manufacturer a rdf:Property ; rdfs:domain ex:drug ; rdfs:range ex:manufacturer .
 
 # Unify Properties
-dbp:region rdfs:subPropertyOf ex:locatedIn .
-geo:inCountry rdfs:subPropertyOf ex:locatedIn .
+dbp:region rdfs:subPropertyOf ex:located_in .
+geo:in_country rdfs:subPropertyOf ex:located_in .

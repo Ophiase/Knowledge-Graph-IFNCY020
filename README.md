@@ -60,7 +60,7 @@ make basic_queries
 ### Ontology
 
 ```bash
-python3 reasoning.py
+make reasoning
 ```
 
 ## Documentation
@@ -98,11 +98,6 @@ PubMed provides a large dataset of biomedical literature. Due to its size (50GB)
 2. **Transform**: Data is transformed into RDF format using [transform_open_drug.py](./transform_open_drug.py) and [transform_geonames.py](./transform_geonames.py). 
     - The transformation scripts map columns to RDF properties and create triples for each entity.
 3. **Merge**: All RDF files are merged into a single RDF file using [merge_rdf.py](./merge_rdf.py).
-
-### Ontology
-
-The ontology defines the structure of the knowledge graph, including classes, properties, and relationships. It ensures consistency and enables reasoning over the data. The ontology is defined in [ontology.ttl](./ontology.ttl) and includes classes such as city, country, and Drug, and properties such as locatedIn, population, and name.
-
 ### Challenges
 
 #### Federated Query Challenges
@@ -110,6 +105,26 @@ The ontology defines the structure of the knowledge graph, including classes, pr
 In `basic_queries_geonames.py`, the federated query is particularly challenging because the `rdfs:label` property in DBpedia does not exactly correspond to the `geo:name` property in Geonames. For example, in Geonames, a city might have `geo:name = "Seaford"`, but in DBpedia, the `rdfs:label` might be `Seaford, Atlanta` or `Seaford, New York`.
 
 This discrepancy makes it difficult to match cities between the two datasets directly. To address this, the query needs to include additional logic to handle these differences, which can make the query more complex and less efficient. This issue highlights the importance of having a consistent ontology and naming conventions across different datasets.
+
+### Reasoning with RDFS
+
+To enhance the knowledge graph, we applied RDFS reasoning to infer new knowledge from the existing data. The ontology defines the relationships between classes and properties, allowing us to infer new information based on these relationships.
+
+#### Ontology Definition
+
+The ontology is defined in [ontology.ttl](./ontology.ttl) and includes the following elements:
+
+- **Classes**: `location`, `city`, `country`, `drug`, `condition`, `interaction`, `manufacturer`
+- **Properties**: `capital_of`, `located_in`, `population`, `source_drug_id`, `target_drug_id`, `manufacturer`
+- **Unification of Properties**: `dbp:region` and `geo:in_country` are unified under `ex:located_in`
+
+#### Reasoning Process
+
+1. **Load Graph**: Load the RDF data and ontology into a graph.
+2. **Apply Reasoning**: Apply RDFS reasoning to infer new knowledge based on the ontology.
+3. **Query Graph**: Execute SPARQL queries on the graph before and after reasoning to compare the results.
+
+The reasoning process is implemented in [reasoning.py](./reasoning.py). The script applies RDFS reasoning and compares the results before and after reasoning.
 
 ### TODO
 

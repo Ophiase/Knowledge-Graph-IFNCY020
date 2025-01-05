@@ -19,6 +19,9 @@ basic_queries:
 	python3 basic_queries_open_drug.py
 	python3 basic_queries_geonames.py
 
+reasoning:
+	python3 reasoning.py
+
 #########################################
 
 resume: resume_open_drug resume_geonames
