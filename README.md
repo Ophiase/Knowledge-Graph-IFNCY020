@@ -11,8 +11,6 @@ This project involves creating a basic knowledge graph for a university assignme
 - [Usage](#usage)
   - [Run Basic Queries](#run-basic-queries)
   - [Ontology](#ontology)
-  - [Start Jena Server](#start-jena-server)
-  - [Stop Jena Server](#stop-jena-server)
 - [Documentation](#documentation)
   - [Data](#data)
     - [Geonames](#geonames)
