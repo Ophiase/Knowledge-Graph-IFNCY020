@@ -9,7 +9,7 @@ from typing import Dict, Any
 DATA_FOLDER = os.path.join("data")
 RDF_FILE = os.path.join(DATA_FOLDER, "sparql_data.rdf")
 VERBOSE = True
-MAX_LINES = 100
+MAX_LINES = 20
 
 ###################################################################################
 
@@ -118,14 +118,14 @@ def save_to_rdf(data: Dict[str, Any], g: Graph, EX: Namespace, source: str) -> N
                 # lat = Literal(result["lat"]["value"], datatype=XSD.float)
                 # long = Literal(result["long"]["value"], datatype=XSD.float)
 
-                g.add((city_uri, RDF.type, EX.City))
+                g.add((city_uri, RDF.type, EX.city))
                 g.add((city_uri, EX.name, city_label))
-                g.add((city_uri, EX.locatedIn, country_uri))
+                g.add((city_uri, EX.located_in, country_uri))
                 # g.add((city_uri, EX.population, population))
                 # g.add((city_uri, EX.area, area))
                 # g.add((city_uri, EX.latitude, lat))
                 # g.add((city_uri, EX.longitude, long))
-                g.add((country_uri, RDF.type, EX.Country))
+                g.add((country_uri, RDF.type, EX.country))
                 g.add((country_uri, EX.name, country_label))
                 g.add((city_uri, EX.source, Literal(source)))
 
@@ -137,12 +137,12 @@ def save_to_rdf(data: Dict[str, Any], g: Graph, EX: Namespace, source: str) -> N
                 population = Literal(result["population"]["value"], datatype=XSD.integer)
                 area = Literal(result["area"]["value"], datatype=XSD.float)
 
-                g.add((country_uri, RDF.type, EX.Country))
+                g.add((country_uri, RDF.type, EX.country))
                 g.add((country_uri, EX.name, country_label))
                 g.add((country_uri, EX.population, population))
                 g.add((country_uri, EX.area, area))
                 g.add((country_uri, EX.capital, capital_uri))
-                g.add((capital_uri, RDF.type, EX.City))
+                g.add((capital_uri, RDF.type, EX.city))
                 g.add((capital_uri, EX.name, capital_label))
                 g.add((country_uri, EX.source, Literal(source)))
 

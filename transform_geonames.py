@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 DATA_FOLDER = os.path.join("data", "geonames")
 OUTPUT_FILE = os.path.join("data", "geonames.rdf")
 VERBOSE = True
-LINE_LIMIT = 10000
+LINE_LIMIT = 1000
 
 ###################################################################################
 
@@ -30,45 +30,45 @@ def add_triples(g: Graph, df: pd.DataFrame, subject_class: URIRef, subject_prefi
 
 
 def process_admin1_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.Admin1Code, EX.admin1Code, {
+    add_triples(g, df, EX.admin1_code, EX.admin1_code, {
         EX.code: "code",
         EX.name: "name",
         EX.name_ascii: "name_ascii",
-        EX.geonameid: "geonameid"
+        EX.geoname_id: "geoname_id"
     }, "code")
 
 
 def process_admin2_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.Admin2Code, EX.admin2Code, {
+    add_triples(g, df, EX.admin2_code, EX.admin2_code, {
         EX.code: "code",
         EX.name: "name",
-        EX.asciiname: "asciiname",
-        EX.geonameid: "geonameid"
+        EX.ascii_name: "ascii_name",
+        EX.geoname_id: "geoname_id"
     }, "code")
 
 
 def process_admin5_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.Admin5Code, EX.admin5Code, {
-        EX.geonameid: "geonameid",
+    add_triples(g, df, EX.admin5_code, EX.admin5_code, {
+        EX.geoname_id: "geoname_id",
         EX.adm5code: "adm5code"
-    }, "geonameid")
+    }, "geoname_id")
 
 
 def process_alternate_names(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.AlternateName, EX.alternateName, {
-        EX.alternateNameId: "alternateNameId",
-        EX.geonameid: "geonameid",
-        EX.isolanguage: "isolanguage",
+    add_triples(g, df, EX.alternate_name, EX.alternate_name, {
+        EX.alternate_name_id: "alternateNameId",
+        EX.geoname_id: "geoname_id",
+        EX.iso_language: "iso_language",
         EX.alternate_name: "alternate_name"
     }, "alternateNameId")
 
 
 def process_cities(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.City, EX.city, {
-        EX.geonameid: "geonameid",
+    add_triples(g, df, EX.city, EX.city, {
+        EX.geoname_id: "geoname_id",
         EX.name: "name",
-        EX.asciiname: "asciiname",
-        EX.alternatenames: "alternatenames",
+        EX.ascii_name: "ascii_name",
+        EX.alternate_names: "alternate_names",
         EX.latitude: "latitude",
         EX.longitude: "longitude",
         EX.feature_class: "feature_class",
@@ -84,35 +84,35 @@ def process_cities(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
         EX.dem: "dem",
         EX.timezone: "timezone",
         EX.modification_date: "modification_date"
-    }, "geonameid")
+    }, "geoname_id")
 
 
 def process_country_info(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.CountryInfo, EX.countryInfo, {
-        EX.iso: "ISO",
-        EX.iso3: "ISO3",
-        EX.iso_numeric: "ISO-Numeric",
+    add_triples(g, df, EX.country_info, EX.country_info, {
+        EX.iso: "iso",
+        EX.iso3: "iso3",
+        EX.iso_numeric: "iso-numeric",
         EX.fips: "fips",
-        EX.country: "Country",
-        EX.capital: "Capital",
-        EX.area_in_sq_km: "Area(in sq km)",
-        EX.population: "Population",
-        EX.continent: "Continent",
+        EX.country: "country",
+        EX.capital: "capital",
+        EX.area_in_sq_km: "area_in_sq_km",
+        EX.population: "population",
+        EX.continent: "continent",
         EX.tld: "tld",
-        EX.currency_code: "CurrencyCode",
-        EX.currency_name: "CurrencyName",
-        EX.phone: "Phone",
-        EX.postal_code_format: "Postal Code Format",
+        EX.currency_code: "currency_code",
+        EX.currency_name: "currency_name",
+        EX.phone: "phone",
+        EX.postal_code_format: "postal_code_format",
         # EX.postal_code_regex: "Postal Code Regex",
         # EX.languages: "Languages",
-        # EX.geonameid: "geonameid",
+        # EX.geoname_id: "geoname_id",
         # EX.neighbours: "neighbours",
         # EX.equivalent_fips_code: "EquivalentFipsCode"
-    }, "ISO")
+    }, "iso")
 
 
 def process_feature_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.FeatureCode, EX.featureCode, {
+    add_triples(g, df, EX.feature_code, EX.feature_code, {
         EX.code: "code",
         EX.name: "name",
         EX.description: "description"
@@ -120,31 +120,31 @@ def process_feature_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
 
 
 def process_hierarchy(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.Hierarchy, EX.hierarchy, {
-        EX.parentId: "parentId",
-        EX.childId: "childId",
+    add_triples(g, df, EX.hierarchy, EX.hierarchy, {
+        EX.parent_id: "parent_id",
+        EX.child_id: "child_id",
         EX.type: "type"
-    }, "parentId")
+    }, "parent_id")
 
 
 def process_iso_language_codes(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
     df.columns = [col.replace(" ", "_") for col in df.columns]
-    add_triples(g, df, EX.ISOLanguageCode, EX.isoLanguageCode, {
-        EX.iso_639_3: "ISO_639_3",
-        EX.iso_639_2: "ISO_639_2",
-        EX.iso_639_1: "ISO_639_1",
-        EX.language_name: "Language_Name"
-    }, "ISO_639_3")
+    add_triples(g, df, EX.iso_language_code, EX.iso_language_code, {
+        EX.iso_639_3: "iso_639_3",
+        EX.iso_639_2: "iso_639_2",
+        EX.iso_639_1: "iso_639_1",
+        EX.language_name: "language_name"
+    }, "iso_639_3")
 
 
 def process_time_zones(g: Graph, EX: Namespace, df: pd.DataFrame) -> None:
-    add_triples(g, df, EX.TimeZone, EX.timeZone, {
-        EX.country_code: "CountryCode",
-        EX.timezone_id: "TimeZoneId",
-        EX.gmt_offset: "GMT_offset_1_Jan_2025",
-        EX.dst_offset: "DST_offset_1_Jul_2025",
-        EX.raw_offset: "rawOffset_independant_of_DST"
-    }, "CountryCode")
+    add_triples(g, df, EX.time_zone, EX.time_zone, {
+        EX.country_code: "country_code",
+        EX.timezone_id: "time_zone_id",
+        EX.gmt_offset: "gmt_offset_1_jan_2025",
+        EX.dst_offset: "dst_offset_1_jul_2025",
+        EX.raw_offset: "raw_offset_independant_of_dst"
+    }, "country_code")
 
 ###################################################################################
 
@@ -154,19 +154,19 @@ def process_file(g: Graph, EX: Namespace, file_name: str, file_path: str) -> Non
         print(f"Processing {file_name}...")
 
     file_columns = {
-        "admin1CodesASCII.txt": ["code", "name", "name_ascii", "geonameid"],
-        "admin2Codes.txt": ["code", "name", "asciiname", "geonameid"],
-        "adminCode5.txt": ["geonameid", "adm5code"],
-        "alternateNamesV2.txt": ["alternateNameId", "geonameid", "isolanguage", "alternate_name", "isPreferredName", "isShortName", "isColloquial", "isHistoric", "from", "to"],
-        "cities500.txt": ["geonameid", "name", "asciiname", "alternatenames", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
-        "cities1000.txt": ["geonameid", "name", "asciiname", "alternatenames", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
-        "cities5000.txt": ["geonameid", "name", "asciiname", "alternatenames", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
-        "cities15000.txt": ["geonameid", "name", "asciiname", "alternatenames", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
-        "countryInfo.txt": ["ISO", "ISO3", "ISO-Numeric", "fips", "Country", "Capital", "Area(in sq km)", "Population", "Continent", "tld", "CurrencyCode", "CurrencyName", "Phone", "Postal Code Format"],# "Postal Code Regex", "Languages", "geonameid", "neighbours", "EquivalentFipsCode"],
+        "admin1CodesASCII.txt": ["code", "name", "name_ascii", "geoname_id"],
+        "admin2Codes.txt": ["code", "name", "ascii_name", "geoname_id"],
+        "adminCode5.txt": ["geoname_id", "adm5code"],
+        "alternateNamesV2.txt": ["alternateNameId", "geoname_id", "iso_language", "alternate_name", "is_preferred_name", "is_short_name", "is_colloquial", "is_historic", "from", "to"],
+        "cities500.txt": ["geoname_id", "name", "ascii_name", "alternate_names", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
+        "cities1000.txt": ["geoname_id", "name", "ascii_name", "alternate_names", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
+        "cities5000.txt": ["geoname_id", "name", "ascii_name", "alternate_names", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
+        "cities15000.txt": ["geoname_id", "name", "ascii_name", "alternate_names", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"],
+        "countryInfo.txt": ["iso", "iso3", "iso-numeric", "fips", "country", "capital", "area_in_sq_km", "population", "continent", "tld", "currency_code", "currency_name", "phone", "postal_code_format"],# "Postal Code Regex", "Languages", "geoname_id", "neighbours", "EquivalentFipsCode"],
         "featureCodes_en.txt": ["code", "name", "description"],
-        "hierarchy.txt": ["parentId", "childId", "type"],
-        "iso-languagecodes.txt": ["ISO_639_3", "ISO_639_2", "ISO_639_1", "Language_Name"],
-        "timeZones.txt": ["CountryCode", "TimeZoneId", "GMT_offset_1_Jan_2025", "DST_offset_1_Jul_2025", "rawOffset_independant_of_DST"]
+        "hierarchy.txt": ["parent_id", "child_id", "type"],
+        "iso-languagecodes.txt": ["iso_639_3", "iso_639_2", "iso_639_1", "language_name"],
+        "timeZones.txt": ["country_code", "time_zone_id", "gmt_offset_1_jan_2025", "dst_offset_1_jul_2025", "raw_offset_independant_of_dst"]
     }
 
     if file_name in file_columns:
