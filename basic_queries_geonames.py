@@ -1,4 +1,5 @@
 from rdflib import Graph, ConjunctiveGraph, URIRef
+from SPARQLWrapper import SPARQLWrapper, JSON
 
 ###################################################################################
 
@@ -6,10 +7,12 @@ MINIMAL_QUERIES_ENABLED = True
 OTHER_QUERIES_ENABLED = True
 QUERY_LIMIT = 10
 VERBOSE = True
+USE_JENA_SERVER = False
 
 RDF_FILE = "data/geonames.rdf"
 GEONAMES_PREFIX = "http://example.org/geonames/"
 NAMED_GRAPH = "http://example.org/geonames/graph"
+JENA_SERVER_URL = "http://localhost:3030/ds/query"
 
 #########################################
 
@@ -217,6 +220,19 @@ def query_graph(graph: Graph, query: str):
             for row in results:
                 print(row)
 
+def query_jena_server(query: str):
+    sparql = SPARQLWrapper(JENA_SERVER_URL)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    if len(results["results"]["bindings"]) == 0:
+        print("No results found.")
+    else:
+        print(f"Number of results: {len(results['results']['bindings'])}")
+        if VERBOSE:
+            for result in results["results"]["bindings"]:
+                print(result)
+
 def main():
     queries = {}
     if MINIMAL_QUERIES_ENABLED:
@@ -242,7 +258,9 @@ def main():
     for query_name, query in queries.items():
         print(f"Executing query: {query_name}\n{query}")
         
-        if query_name == 'named_graph_query':
+        if USE_JENA_SERVER:
+            query_jena_server(query)
+        elif query_name == 'named_graph_query':
             query_graph(cg, query)
         else:
             query_graph(g, query)
