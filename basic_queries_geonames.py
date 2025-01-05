@@ -2,9 +2,9 @@ from rdflib import Graph
 
 ###################################################################################
 
-MINIMAL_QUERIES_ENABLED = False
+MINIMAL_QUERIES_ENABLED = True
 OTHER_QUERIES_ENABLED = True
-QUERY_LIMIT = 5
+QUERY_LIMIT = 2
 VERBOSE = True
 
 RDF_FILE = "data/geonames.rdf"
@@ -13,23 +13,54 @@ GEONAMES_PREFIX = "http://example.org/geonames/"
 #########################################
 
 MINIMAL_QUERIES = {
-    # "federated_query": f"""
-    # PREFIX dbo: <http://dbpedia.org/ontology/>
-    # PREFIX geo: <{GEONAMES_PREFIX}>
-    # SELECT ?city ?name ?population ?abstract
-    # WHERE {{
-    #     SERVICE <http://dbpedia.org/sparql> {{
-    #         ?city a dbo:city ;
-    #               dbo:abstract ?abstract .
-    #         FILTER (lang(?abstract) = 'en')
-    #     }}
-    #     ?city a geo:city ;
-    #           geo:name ?name ;
-    #           geo:population ?population .
-    # }}
-    # LIMIT {QUERY_LIMIT}
-    # """,
+    "test" : f"""
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    SELECT ?name
+    WHERE {{
+    SERVICE <https://dbpedia.org/sparql> {{
+        ?city a dbo:City ;
+            dbo:abstract ?abstract ;
+            rdfs:label ?name .
+        FILTER (lang(?abstract) = 'en' && lang(?name) = 'en')
+        FILTER (STRSTARTS(STR(?name), "Seaford"))
+    }}
+    }}
+    LIMIT {QUERY_LIMIT}
+    """,
 
+    "test2" : f"""
+    PREFIX geo: <{GEONAMES_PREFIX}>
+    SELECT ?match
+    WHERE {{
+        ?city a geo:city ;
+              geo:name ?name ;
+              geo:population ?population .
+        BIND (str(?name) AS ?match)
+        FILTER (STRSTARTS(STR(?name), "Sea"))
+    }}
+    LIMIT {QUERY_LIMIT}
+    """,
+
+    # wip
+    "federated_query": f"""
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX geo: <{GEONAMES_PREFIX}>
+    SELECT ?city ?name ?population ?abstract
+    WHERE {{
+        SERVICE <https://dbpedia.org/sparql> {{
+            ?dbo_city a dbo:City ;
+                dbo:abstract ?abstract ;
+                rdfs:label ?name .
+            FILTER (lang(?abstract) = 'en')
+        }}
+        ?city a geo:city ;
+              geo:name ?name ;
+              geo:population ?population .
+    }}
+    LIMIT {QUERY_LIMIT}
+    """,
+
+    # working
     "optional_query": f"""
     PREFIX geo: <{GEONAMES_PREFIX}>
     SELECT ?city ?name ?population ?elevation
@@ -42,6 +73,7 @@ MINIMAL_QUERIES = {
     LIMIT {QUERY_LIMIT}
     """,
 
+    # # not working
     # "named_graph_query": f"""
     # PREFIX geo: <{GEONAMES_PREFIX}>
     # SELECT ?city ?name ?population
@@ -56,6 +88,7 @@ MINIMAL_QUERIES = {
     # LIMIT {QUERY_LIMIT}
     # """,
 
+    # working
     "aggregation_query": f"""
     PREFIX geo: <{GEONAMES_PREFIX}>
     SELECT ?country (SUM(?population) AS ?totalPopulation)
@@ -69,25 +102,35 @@ MINIMAL_QUERIES = {
     LIMIT {QUERY_LIMIT}
     """,
 
-    # No Results found.
+    # working
     "path_expression_query": f"""
     PREFIX geo: <{GEONAMES_PREFIX}>
     SELECT ?city ?name
     WHERE {{
-        ?city geo:admin1_code/geo:admin2_code ?admin2_code ;
+        ?city (geo:admin1_code|geo:admin2_code)+ ?admin2_code ;
               geo:name ?name .
     }}
     LIMIT {QUERY_LIMIT}
     """,
 
-    # No Results found.
-    "minus_query": f"""
+    # working
+    "minus_query_name_starts_without_b": f"""
     PREFIX geo: <{GEONAMES_PREFIX}>
     SELECT ?city ?name
     WHERE {{
         ?city a geo:city ;
               geo:name ?name .
-        MINUS {{ ?city geo:population ?population }}
+        MINUS {{ ?city geo:name ?name . FILTER (STRSTARTS(?name, "B")) }}
+    }}
+    LIMIT {QUERY_LIMIT}
+    """,
+    "minus_query_name_starts_without_s": f"""
+    PREFIX geo: <{GEONAMES_PREFIX}>
+    SELECT ?city ?name
+    WHERE {{
+        ?city a geo:city ;
+              geo:name ?name .
+        MINUS {{ ?city geo:name ?name . FILTER (STRSTARTS(?name, "S")) }}
     }}
     LIMIT {QUERY_LIMIT}
     """
