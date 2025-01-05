@@ -13,20 +13,56 @@ EX_PREFIX = "http://example.org/"
 #########################################
 
 MINIMAL_QUERIES = {
-    # TODO: FIX (No results)
+    # # Federated query part 1 (verify the dbpedia ontology)
+    #     # Our ontology drugs to try:
+    #     # Tolazamide
+    #     # Cochliobolus
+    #     # Thionicotinamid
+    #     # Lacidipine
+    #     # Veglin
+    # "federated_query_part_1": f"""
+    # PREFIX ex: <{EX_PREFIX}>
+    # SELECT ?name
+    # WHERE {{
+    #     SERVICE <https://dbpedia.org/sparql> {{
+    #         ?drug a <http://dbpedia.org/ontology/Drug> ;
+    #               <http://dbpedia.org/ontology/abstract> ?abstract ;
+    #               rdfs:label ?name .
+    #         FILTER (lang(?abstract) = 'en' && lang(?name) = 'en')
+    #         FILTER (str(?name) = "Tolazamide")
+    #     }}
+    # }}
+    # LIMIT {QUERY_LIMIT}
+    # """,
+
+    # # Federated query part 2 (verify our ontology)
+    # "federated_query_part_2": f"""
+    # PREFIX ex: <{EX_PREFIX}>
+    # SELECT ?drug ?name
+    # WHERE {{
+    #     ?drug a ex:Drug ;
+    #           ex:name ?name .
+    #     FILTER (str(?name) = "Tolazamide")
+    # }}
+    # LIMIT {QUERY_LIMIT}
+    # """,
+
     # Federated query
+        # Again we use a specifc ?name to fasten the query
     "federated_query": f"""
     PREFIX ex: <{EX_PREFIX}>
     SELECT ?drug ?name ?abstract
     WHERE {{
         SERVICE <https://dbpedia.org/sparql> {{
-            ?drug a <http://dbpedia.org/ontology/Drug> ;
+            ?drug_dbpedia a <http://dbpedia.org/ontology/Drug> ;
                   <http://dbpedia.org/ontology/abstract> ?abstract ;
                   rdfs:label ?name .
             FILTER (lang(?abstract) = 'en' && lang(?name) = 'en')
+            FILTER (str(?name) = "Tolazamide")
         }}
         ?drug a ex:Drug ;
-              ex:name ?name .
+              ex:name ?name2 .
+        FILTER (STR(?name) = STR(?name2))
     }}
     LIMIT {QUERY_LIMIT}
     """,
@@ -69,13 +105,12 @@ MINIMAL_QUERIES = {
     LIMIT {QUERY_LIMIT}
     """,
 
-    # TODO: FIX (No results)
     # Query using path expressions
     "path_expression_query": f"""
     PREFIX ex: <{EX_PREFIX}>
     SELECT ?drug ?name
     WHERE {{
-        ?drug ex:manufacturer/ex:name ?name .
+        ?drug (ex:manufacturer|ex:name)+ ?name .
     }}
     LIMIT {QUERY_LIMIT}
     """,
