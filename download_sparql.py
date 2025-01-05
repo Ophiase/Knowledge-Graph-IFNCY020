@@ -31,28 +31,18 @@ def fetch_dbpedia_data() -> Dict[str, Any]:
     queries = {
         "cities": f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
-        SELECT ?city ?cityLabel ?country ?countryLabel WHERE {{
+        SELECT ?city ?cityLabel ?country ?countryLabel ?population ?area ?lat ?long WHERE {{
             ?city a dbo:City ;
-                rdfs:label ?cityLabel ;
-                dbo:country ?country .
+                  rdfs:label ?cityLabel ;
+                  dbo:country ?country ;
+                  dbo:populationTotal ?population ;
+                  dbo:areaTotal ?area ;
+                  geo:lat ?lat ;
+                  geo:long ?long .
             ?country rdfs:label ?countryLabel .
             FILTER (lang(?cityLabel) = 'en' && lang(?countryLabel) = 'en')
         }} LIMIT {MAX_LINES}
         """,
-        # "cities": f"""
-        # PREFIX dbo: <http://dbpedia.org/ontology/>
-        # SELECT ?city ?cityLabel ?country ?countryLabel ?population ?area ?lat ?long WHERE {{
-        #     ?city a dbo:City ;
-        #           rdfs:label ?cityLabel ;
-        #           dbo:country ?country ;
-        #           dbo:populationTotal ?population ;
-        #           dbo:areaTotal ?area ;
-        #           geo:lat ?lat ;
-        #           geo:long ?long .
-        #     ?country rdfs:label ?countryLabel .
-        #     FILTER (lang(?cityLabel) = 'en' && lang(?countryLabel) = 'en')
-        # }} LIMIT {MAX_LINES}
-        # """,
         # "countries": f"""
         # PREFIX dbo: <http://dbpedia.org/ontology/>
         # SELECT ?country ?countryLabel ?population ?area ?capital ?capitalLabel WHERE {{
@@ -79,29 +69,20 @@ def fetch_wikidata_data() -> Dict[str, Any]:
 
     queries = {
         "cities": f"""
-        SELECT ?city ?cityLabel ?country ?countryLabel WHERE {{
+        SELECT ?city ?cityLabel ?country ?countryLabel ?population ?area ?lat ?long WHERE {{
             ?city wdt:P31/wdt:P279* wd:Q515 ;
-                rdfs:label ?cityLabel ;
-                wdt:P17 ?country .
+                  rdfs:label ?cityLabel ;
+                  wdt:P17 ?country ;
+                  wdt:P1082 ?population ;
+                  wdt:P2046 ?area ;
+                  wdt:P625 ?coordinates .
             ?country rdfs:label ?countryLabel .
+            BIND(STRAFTER(STR(?coordinates), "Point(") AS ?coords)
+            BIND(STRAFTER(?coords, " ") AS ?long)
+            BIND(STRBEFORE(?coords, " ") AS ?lat)
             FILTER (lang(?cityLabel) = 'en' && lang(?countryLabel) = 'en')
         }} LIMIT {MAX_LINES}
         """,
-        # "cities": f"""
-        # # SELECT ?city ?cityLabel ?country ?countryLabel ?population ?area ?lat ?long WHERE {{
-        # #     ?city wdt:P31/wdt:P279* wd:Q515 ;
-        # #           rdfs:label ?cityLabel ;
-        # #           wdt:P17 ?country ;
-        # #           wdt:P1082 ?population ;
-        # #           wdt:P2046 ?area ;
-        # #           wdt:P625 ?coordinates .
-        # #     ?country rdfs:label ?countryLabel .
-        # #     BIND(STRAFTER(STR(?coordinates), "Point(") AS ?coords)
-        # #     BIND(STRAFTER(?coords, " ") AS ?long)
-        # #     BIND(STRBEFORE(?coords, " ") AS ?lat)
-        # #     FILTER (lang(?cityLabel) = 'en' && lang(?countryLabel) = 'en')
-        # # }} LIMIT {MAX_LINES}
-        # # """,
         # "countries": f"""
         # SELECT ?country ?countryLabel ?population ?area ?capital ?capitalLabel WHERE {{
         #     ?country wdt:P31 wd:Q6256 ;
@@ -182,6 +163,8 @@ def main() -> None:
     wikidata_data = fetch_wikidata_data()
     save_to_rdf(wikidata_data, g, EX, "Wikidata")
 
+    if VERBOSE:
+        print("Serialized...")
     g.serialize(destination=RDF_FILE, format='xml')
 
     if VERBOSE:
