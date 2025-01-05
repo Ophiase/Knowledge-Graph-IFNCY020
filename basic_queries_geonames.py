@@ -22,7 +22,7 @@ MINIMAL_QUERIES = {
             dbo:abstract ?abstract ;
             rdfs:label ?name .
         FILTER (lang(?abstract) = 'en' && lang(?name) = 'en')
-        FILTER (STRSTARTS(STR(?name), "Seaford"))
+        FILTER (STRSTARTS(STR(?name), "Barranq"))
     }}
     }}
     LIMIT {QUERY_LIMIT}
@@ -36,28 +36,28 @@ MINIMAL_QUERIES = {
               geo:name ?name ;
               geo:population ?population .
         BIND (str(?name) AS ?match)
-        FILTER (STRSTARTS(STR(?name), "Sea"))
     }}
     LIMIT {QUERY_LIMIT}
     """,
 
-    # wip
+    # working, but slow if not constrainted
     "federated_query": f"""
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX geo: <{GEONAMES_PREFIX}>
-    SELECT ?city ?name ?population ?abstract
+    SELECT ?city ?name ?name2 ?population ?abstract
     WHERE {{
         SERVICE <https://dbpedia.org/sparql> {{
             ?dbo_city a dbo:City ;
                 dbo:abstract ?abstract ;
                 rdfs:label ?name .
-            FILTER (lang(?abstract) = 'en')
+            FILTER (lang(?abstract) = 'en' && lang(?name) = 'en')
+            FILTER (STR(?name) = "Barranqueras")
         }}
         ?city a geo:city ;
-              geo:name ?name ;
+              geo:name ?name2 ;
               geo:population ?population .
     }}
-    LIMIT {QUERY_LIMIT}
+    LIMIT 1
     """,
 
     # working
