@@ -1,5 +1,8 @@
 ###################################################################################
 
+pip:
+	pip install -r requirements.txt
+
 download:
 	python3 download_kaggle.py
 	python3 download_geonames.py

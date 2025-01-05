@@ -25,6 +25,9 @@ This project involves creating a basic knowledge graph for a university assignme
 ## Installation
 
 ```bash
+# pip dependancies
+make pip 
+
 # download, transform, merge
 make download 
 make transform
