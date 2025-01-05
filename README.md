@@ -5,9 +5,10 @@
 ## Installation
 
 ```python
-# extract transform
+# download, transform, merge
 make download 
 make transform
+make merge
 ```
 
 ### Setup a server
@@ -15,6 +16,7 @@ make transform
 Requires : Apache Jena, Riot, Fuseki
 
 ```bash
+# for script requiring org.apache.jena,
 # do not forget to add JENA to java class path in .zshrc or .bashrc
 export CLASSPATH=$CLASSPATH:$JENAROOT/lib/*
 ```
@@ -27,3 +29,20 @@ export CLASSPATH=$CLASSPATH:$JENAROOT/lib/*
 make basic_queries
 ```
 
+### Ontology
+
+```bash
+python3 reasoning.py
+```
+
+## Documentation
+
+### Data
+
+#### Geonames
+#### Wikidata
+#### Dbpedia
+#### Open-Drug
+#### PubMed
+
+We ignore this one (too heavy to process, 50G to download)
