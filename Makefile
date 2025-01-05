@@ -22,11 +22,16 @@ basic_queries:
 reasoning:
 	python3 reasoning.py
 
+#########################################
+
 setup_server:
 	./setup_jena_server.sh
 
 start_server:
 	./start_jena_server.sh
+
+load_rdf:
+	./load_rdf_to_jena.sh
 
 stop_server:
 	@echo "Stopping Fuseki server..."
