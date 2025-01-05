@@ -20,6 +20,7 @@ This project involves creating a basic knowledge graph for a university assignme
     - [PubMed](#pubmed)
   - [Data Loading and Transformation](#data-loading-and-transformation)
   - [Ontology](#ontology)
+  - [Challenges](#challenges)
   - [TODO](#todo)
 
 ## Installation
@@ -101,6 +102,14 @@ PubMed provides a large dataset of biomedical literature. Due to its size (50GB)
 ### Ontology
 
 The ontology defines the structure of the knowledge graph, including classes, properties, and relationships. It ensures consistency and enables reasoning over the data. The ontology is defined in [ontology.ttl](./ontology.ttl) and includes classes such as city, country, and Drug, and properties such as locatedIn, population, and name.
+
+### Challenges
+
+#### Federated Query Challenges
+
+In `basic_queries_geonames.py`, the federated query is particularly challenging because the `rdfs:label` property in DBpedia does not exactly correspond to the `geo:name` property in Geonames. For example, in Geonames, a city might have `geo:name = "Seaford"`, but in DBpedia, the `rdfs:label` might be `Seaford, Atlanta` or `Seaford, New York`.
+
+This discrepancy makes it difficult to match cities between the two datasets directly. To address this, the query needs to include additional logic to handle these differences, which can make the query more complex and less efficient. This issue highlights the importance of having a consistent ontology and naming conventions across different datasets.
 
 ### TODO
 
