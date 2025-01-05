@@ -107,4 +107,3 @@ The ontology defines the structure of the knowledge graph, including classes, pr
 - **Wikidata and DBpedia**: Enhance the data fetching to include more properties such as population, area, and coordinates.
 - **Reasoning**: Apply more advanced reasoning techniques to infer new knowledge from the data.
 - **Queries**: Develop more complex SPARQL queries to demonstrate the integration of different datasets.
-- **Refactoring**: Convert everything to camelcase.
