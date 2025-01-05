@@ -1,19 +1,21 @@
-from rdflib import Graph
+from rdflib import Graph, ConjunctiveGraph, URIRef
 
 ###################################################################################
 
 MINIMAL_QUERIES_ENABLED = True
 OTHER_QUERIES_ENABLED = True
-QUERY_LIMIT = 2
+QUERY_LIMIT = 10
 VERBOSE = True
 
 RDF_FILE = "data/geonames.rdf"
 GEONAMES_PREFIX = "http://example.org/geonames/"
+NAMED_GRAPH = "http://example.org/geonames/graph"
 
 #########################################
 
 MINIMAL_QUERIES = {
-    "test" : f"""
+    # find the city in dbpedia
+    "federated_query_part_1" : f"""
     PREFIX dbo: <http://dbpedia.org/ontology/>
     SELECT ?name
     WHERE {{
@@ -28,7 +30,8 @@ MINIMAL_QUERIES = {
     LIMIT {QUERY_LIMIT}
     """,
 
-    "test2" : f"""
+    # find the city in geonames
+    "federated_query_part_2" : f"""
     PREFIX geo: <{GEONAMES_PREFIX}>
     SELECT ?match
     WHERE {{
@@ -73,20 +76,20 @@ MINIMAL_QUERIES = {
     LIMIT {QUERY_LIMIT}
     """,
 
-    # # not working
-    # "named_graph_query": f"""
-    # PREFIX geo: <{GEONAMES_PREFIX}>
-    # SELECT ?city ?name ?population
-    # FROM NAMED <http://example.org/geonames/graph>
-    # WHERE {{
-    #     GRAPH <http://example.org/geonames/graph> {{
-    #         ?city a geo:city ;
-    #               geo:name ?name ;
-    #               geo:population ?population .
-    #     }}
-    # }}
-    # LIMIT {QUERY_LIMIT}
-    # """,
+    # named graph directly included with python code instead
+    # of "FROM NAMED <{NAMED_GRAPH}>"
+    "named_graph_query": f"""
+    PREFIX geo: <{GEONAMES_PREFIX}>
+    SELECT ?city ?name ?population
+    WHERE {{
+        GRAPH <{NAMED_GRAPH}> {{
+            ?city a geo:city ;
+                  geo:name ?name ;
+                  geo:population ?population .
+        }}
+    }}
+    LIMIT {QUERY_LIMIT}
+    """,
 
     # working
     "aggregation_query": f"""
@@ -204,11 +207,8 @@ OTHER_QUERIES = {
 
 ###################################################################################
 
-
-def query_graph(query: str):
-    g = Graph()
-    g.parse(RDF_FILE, format="xml")
-    results = g.query(query, initNs={})
+def query_graph(graph: Graph, query: str):
+    results = graph.query(query, initNs={})
     if len(results) == 0:
         print("No results found.")
     else:
@@ -217,7 +217,6 @@ def query_graph(query: str):
             for row in results:
                 print(row)
 
-
 def main():
     queries = {}
     if MINIMAL_QUERIES_ENABLED:
@@ -225,9 +224,29 @@ def main():
     if OTHER_QUERIES_ENABLED:
         queries.update(OTHER_QUERIES)
 
+    if VERBOSE:
+        print("Build graph..")
+
+    g = Graph()
+    g.parse(RDF_FILE, format="xml")
+    
+    cg = ConjunctiveGraph()
+    graph_uri = URIRef(NAMED_GRAPH)
+    for s, p, o in g:
+        cg.get_context(graph_uri).add((s, p, o))
+
+    if VERBOSE:
+        print(f"ConjunctiveGraph has {len(cg)} triples.")
+        print(f"Named graph {graph_uri} has {len(cg.get_context(graph_uri))} triples.")
+
     for query_name, query in queries.items():
         print(f"Executing query: {query_name}\n{query}")
-        query_graph(query)
+        
+        if query_name == 'named_graph_query':
+            query_graph(cg, query)
+        else:
+            query_graph(g, query)
+        
         print("\n" + "="*50 + "\n")
 
 
